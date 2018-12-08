@@ -1,0 +1,6 @@
+numpy==1.15.4
+Pillow==5.3.0
+torchvision==0.2.1
+torch==1.0.0
+matplotlib==3.0.2
+jupyter==4.4.0

@@ -1,0 +1,13 @@
+# IDE
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+venv/
+
+# Dataset dirs
+/in
+/out
