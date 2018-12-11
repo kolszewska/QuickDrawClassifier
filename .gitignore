@@ -11,3 +11,6 @@ venv/
 # Dataset dirs
 /in
 /out
+
+# Model file
+*.pt
