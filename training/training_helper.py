@@ -1,12 +1,12 @@
 import logging
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 from torch import optim
 from torch.utils.data import DataLoader
 from torch.nn import Module
 from torch.nn.modules import loss
 from tensorboardX import SummaryWriter
-
-from training.data_helper import view_classification_result
 
 writer = SummaryWriter()
 logging.basicConfig(filename='convolutional_training.log', level=logging.INFO,
@@ -16,7 +16,6 @@ logging.basicConfig(filename='convolutional_training.log', level=logging.INFO,
 def train(train_loader: DataLoader, validation_loader: DataLoader, test_loader: DataLoader, num_epochs: int,
           total_training_batches: int, model: Module, criterion: loss, optimizer: optim):
     """Train network."""
-    train_losses = []
     batch_number = 0
     step_number = 0
     for epoch in range(num_epochs):
@@ -31,8 +30,8 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, test_loader: 
             optimizer.zero_grad()
 
             # Forwards pass, then backward pass, then update weights
-            log_ps = model(images)
-            model_loss = criterion(log_ps, labels)
+            probabilities = model(images)
+            model_loss = criterion(probabilities, labels)
             model_loss.backward()
             optimizer.step()
 
@@ -45,7 +44,6 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, test_loader: 
 
         train_loss = running_loss / len(train_loader)
         writer.add_scalar('data/train_loss', train_loss, step_number)
-        train_losses.append(train_loss)
 
         logging.info("Epoch: {}/{}.. ".format(epoch + 1, num_epochs))
         logging.info("Training Loss: {:.3f}.. ".format(train_loss))
@@ -66,15 +64,14 @@ def validate(model: Module, validation_loader: DataLoader, criterion: loss, step
         # set model to evaluation mode
         model.eval()
         for images, labels in validation_loader:
-
             probabilities = model(images)
             validation_loss += criterion(probabilities, labels)
 
             # Get the class probabilities
-            ps = torch.softmax(probabilities, dim=1)
+            class_probabilities = torch.softmax(probabilities, dim=1)
 
             # Get top probabilities
-            top_probability, top_class = ps.topk(1, dim=1)
+            top_probability, top_class = class_probabilities.topk(1, dim=1)
 
             # Comparing one element in each row of top_class with
             # each of the labels, and return True/False
@@ -83,12 +80,29 @@ def validate(model: Module, validation_loader: DataLoader, criterion: loss, step
             # Number of correct predictions
             accuracy += torch.mean(equals.type(torch.FloatTensor))
 
-            validation_loss = accuracy / len(validation_loader)
-            writer.add_scalar('data/validation_loss', validation_loss, step_number)
-            validation_losses.append(validation_loss / len(validation_loader))
+    # Set model to train mode
+    model.train()
 
-            logging.info("Validation Loss: {:.3f}.. ".format(validation_loss))
-            logging.info("Validation Accuracy: {:.3f}".format(accuracy / len(validation_loader)))
+    validation_loss = validation_loss / len(validation_loader)
+    validation_accuracy = (accuracy / len(validation_loader)) * 100
+
+    writer.add_scalar('data/validation_loss', validation_loss, step_number)
+    writer.add_scalar('data/validation_accuracy', validation_accuracy, step_number)
+
+    validation_losses.append(validation_loss)
+
+    logging.info("Validation Loss: {:.3f}.. ".format(validation_loss))
+    logging.info("Validation Accuracy: {:.3f}%".format(validation_accuracy))
+
+    # Get minimum validation loss
+    min_validation_loss = min(validation_losses)
+
+    # Save model if validation loss have decreased
+    if validation_loss <= min_validation_loss:
+        logging.info(
+            "Validation has decreased {:.5f} -> {:.5f}, saving model".format(validation_loss,
+                                                                             min_validation_loss))
+        torch.save(model.state_dict(), 'model.pt'.format(min_validation_loss))
 
 
 def test(model: Module, test_loader: DataLoader):
@@ -125,3 +139,18 @@ def test(model: Module, test_loader: DataLoader):
     test_accuracy = (test_accuracy / len(test_loader)) * 100
     writer.add_scalar('data/test_accuracy', test_accuracy)
     logging.info("Test Accuracy: {:.3f}%".format(test_accuracy))
+
+
+def view_classification_result(image, probabilities):
+    """Viewing an image and it's predicted classes."""
+    probabilities = probabilities.data.numpy().squeeze()
+    fig, (ax1, ax2) = plt.subplots(figsize=(6, 9), ncols=2)
+    ax1.imshow(image.resize_(1, 28, 28).numpy().squeeze())
+    ax1.axis('off')
+    ax2.barh(np.arange(10), probabilities)
+    ax2.set_aspect(0.1)
+    ax2.set_yticks(np.arange(10))
+    ax2.set_yticklabels(['Bear', 'Bee', 'Camel', 'Cat', 'Cow', 'Crab', 'Crocodile', 'Dog', 'Dolphin', 'Duck'])
+    ax2.set_title('Class probabilities')
+    ax2.set_xlim(0, 1.1)
+    plt.tight_layout()

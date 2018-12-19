@@ -10,11 +10,11 @@ NUM_CLASSES = 10
 BATCH_SIZE = 256
 LEARNING_RATE = 0.01
 
-train_loader, validation_loader, test_loader, total_training_batches = load_data('out/train', 'out/validation',
-                                                                                 'out/test', BATCH_SIZE,
+train_loader, validation_loader, test_loader, total_training_batches = load_data('out2/train', 'out2/validation',
+                                                                                 'out2/test', BATCH_SIZE,
                                                                                  get_transforms_for_convolutional())
 model = Convolutional(NUM_CLASSES)
-optimizer = loss.CrossEntropyLoss()
-criterion = optim.SGD(model.parameters(), lr=LEARNING_RATE)
+criterion = loss.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE)
 
 train(train_loader, validation_loader, test_loader, NUM_EPOCHS, total_training_batches, model, criterion, optimizer)

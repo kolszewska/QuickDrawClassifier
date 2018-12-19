@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import torch
 from torchvision import transforms, datasets
 
@@ -41,18 +39,3 @@ def get_transforms_for_convolutional():
     """Return transforms for data that will be used in Convolutional network."""
     return transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize([0.8255, 0.8255, 0.8255], [0.0478, 0.0478, 0.0478])])
-
-
-def view_classification_result(image, probabilities):
-    """Viewing an image and it's predicted classes."""
-    probabilities = probabilities.data.numpy().squeeze()
-    fig, (ax1, ax2) = plt.subplots(figsize=(6, 9), ncols=2)
-    ax1.imshow(image.resize_(1, 28, 28).numpy().squeeze())
-    ax1.axis('off')
-    ax2.barh(np.arange(10), probabilities)
-    ax2.set_aspect(0.1)
-    ax2.set_yticks(np.arange(10))
-    ax2.set_yticklabels(['Bear', 'Bee', 'Camel', 'Cat', 'Cow', 'Crab', 'Crocodile', 'Dog', 'Dolphin', 'Duck'])
-    ax2.set_title('Class probabilities')
-    ax2.set_xlim(0, 1.1)
-    plt.tight_layout()
