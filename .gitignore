@@ -14,3 +14,7 @@ venv/
 
 # Model file
 *.pt
+
+# Misc
+*.log
+/runs
