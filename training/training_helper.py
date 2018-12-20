@@ -9,7 +9,7 @@ from torch.nn.modules import loss
 from tensorboardX import SummaryWriter
 
 writer = SummaryWriter()
-logging.basicConfig(filename='convolutional_training.log', level=logging.INFO,
+logging.basicConfig(filename='training.log', level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
@@ -50,7 +50,6 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, test_loader: 
 
         batch_number = 0
 
-    test(model, test_loader)
     writer.close()
 
 
@@ -105,9 +104,11 @@ def validate(model: Module, validation_loader: DataLoader, criterion: loss, step
         torch.save(model.state_dict(), 'model.pt'.format(min_validation_loss))
 
 
-def test(model: Module, test_loader: DataLoader):
+def test(test_loader: DataLoader):
     """Test network."""
     # Prepare model for evaluation
+    model = Module()
+    model.load_state_dict(torch.load('model.pt'))
     model.eval()
 
     classification_result_counter = 0

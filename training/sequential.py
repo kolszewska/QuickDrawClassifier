@@ -3,7 +3,7 @@ from torch.nn.modules import loss
 
 from models.sequential import Sequential
 from training.data_helper import get_transforms_for_sequential, load_data
-from training.training_helper import train
+from training.training_helper import train, test
 
 NUM_EPOCHS = 5
 NUM_CLASSES = 10
@@ -18,3 +18,4 @@ criterion = loss.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE)
 
 train(train_loader, validation_loader, test_loader, NUM_EPOCHS, total_training_batches, model, criterion, optimizer)
+test(test_loader)
