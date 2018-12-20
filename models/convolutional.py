@@ -3,7 +3,7 @@ import torch.nn.functional as f
 
 
 class Convolutional(nn.Module):
-    def __init__(self, num_classes):
+    def __init__(self, num_classes, dropout):
         super(Convolutional, self).__init__()
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
@@ -11,7 +11,7 @@ class Convolutional(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         self.fc1 = nn.Linear(64 * 3 * 3, 200)  # 64 out channels, 3 color channels, kernel of size 3
         self.fc2 = nn.Linear(200, num_classes)
-        self.dropout = nn.Dropout(0.50)
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
         x = f.relu(self.conv1(x))

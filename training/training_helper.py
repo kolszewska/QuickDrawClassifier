@@ -13,7 +13,7 @@ logging.basicConfig(filename='training.log', level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
-def train(train_loader: DataLoader, validation_loader: DataLoader, test_loader: DataLoader, num_epochs: int,
+def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: int,
           total_training_batches: int, model: Module, criterion: loss, optimizer: optim):
     """Train network."""
     batch_number = 0
