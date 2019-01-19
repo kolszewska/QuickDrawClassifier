@@ -9,7 +9,7 @@ class Convolutional(nn.Module):
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
         self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = nn.Linear(64 * 3 * 3, 200)  # 64 out channels, 3 color channels, kernel of size 3
+        self.fc1 = nn.Linear(64 * 3 * 3, 200)
         self.fc2 = nn.Linear(200, num_classes)
         self.dropout = nn.Dropout(dropout)
 
