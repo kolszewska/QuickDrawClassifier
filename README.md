@@ -128,7 +128,7 @@ Shared parameters during the experiments:
 | 64  | 10%  | Blue |
 |  128 |  10% | Red |
 |  256 |  10% | Orange |
-|  512 | **65.13%**| Green |
+|  **512** | **65.13%**| **Green** |
 
 **Summary**: The experiment result is actually what was expected. Large learning rate
 makes it unable to actually hit a global minima. So every model below the 512 batch size
@@ -148,25 +148,25 @@ was returning the same class which (when we have 10 classes) results in exactly 
 | 64  | 84.91%  | Blue |
 |  128 |  85.78% | Red |
 |  256 |  85.58% | Light blue |
-|  512 | **85.84%**  | Magenta |
+|  **512** | **85.84%**  | **Magenta** |
 
 **Summary**: 
 
 ### Third experiment (lr=0.0001)
 
-![Ex2 train accuracy](images/ex2_train_acc.png) ![Ex2 validation accuracy](images/ex2_val_acc.png)
+![Ex3 train accuracy](images/ex3_train_acc.png) ![Ex3 validation accuracy](images/ex3_val_acc.png)
  
-![Ex2 train loss](images/ex2_train_loss.png)  ![Ex2 validation loss](images/ex2_val_loss.png)
+![Ex3 train loss](images/ex3_train_loss.png)  ![Ex3 validation loss](images/ex3_val_loss.png)
 
 **Test accuracy:**
 
 | Batch size | Accuracy | Color on the plot
 |---|---|---|
-| 32  | 83.82%  | Orange |
-| 64  | 84.91%  | Blue |
-|  128 |  85.78% | Red |
-|  256 |  85.58% | Light blue |
-|  512 | **85.84%**  | Magenta |
+| 32  | 85.77%  | Magenta |
+| **64**  | **86.11%**  | **Grey** |
+|  128 |  85.54% | Orange |
+|  256 |  85.34% | Green |
+|  512 | 84.57%  | Light blue |
 
 **Summary**: 
 
