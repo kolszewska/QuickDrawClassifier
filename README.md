@@ -90,10 +90,22 @@ TensorBoard with the following command:
 $ (venv) tensorboard --logdir runs
 ```
 
+### Classification visualisation
+
+To get this kind of visualisation, simply head to the
+`ClassificationVisualisation.ipynb`
+
+![Visualisation](images/visualisation.png)
+
 ### Conducted experiments
 
 I have conducted three experiments to see how would the network train with different values of the
 **learning rate** and **batch size**.
+
+Tested the following combinations:
+- Learning rate=0.01 witch batch sizes=32, 64, 128, 256, 512
+- Learning rate=0.001 witch batch sizes=32, 64, 128, 256, 512
+- Learning rate=0.0001 witch batch sizes=32, 64, 128, 256, 512
 
 Shared parameters during the experiments:
 
@@ -103,8 +115,60 @@ Shared parameters during the experiments:
 
 #### First experiment (lr=0.01)
 
-![Ex1 train accuracy](images/ex1_train_acc.png)
-![a](images/Screenshot%20from%202019-01-20%2022-49-38.png)
+ ![Ex1 train accuracy](images/ex1_train_acc.png) ![Ex1 validation accuracy](images/ex1_val_acc.png)
+ 
+ ![Ex1 train loss](images/ex1_train_loss.png)  ![Ex1 validation loss](images/ex1_val_loss.png)
+
+
+**Test accuracy:**
+
+| Batch size | Accuracy | Color on the plot
+|---|---|---|
+| 32  | 10%  | Grey |
+| 64  | 10%  | Blue |
+|  128 |  10% | Red |
+|  256 |  10% | Orange |
+|  512 | **65.13%**| Green |
+
+**Summary**: The experiment result is actually what was expected. Large learning rate
+makes it unable to actually hit a global minima. So every model below the 512 batch size
+was returning the same class which (when we have 10 classes) results in exactly 10% accuracy.
+
+### Second experiment (lr=0.001)
+
+![Ex2 train accuracy](images/ex2_train_acc.png) ![Ex2 validation accuracy](images/ex2_val_acc.png)
+ 
+![Ex2 train loss](images/ex2_train_loss.png)  ![Ex2 validation loss](images/ex2_val_loss.png)
+
+**Test accuracy:**
+
+| Batch size | Accuracy | Color on the plot
+|---|---|---|
+| 32  | 83.82%  | Orange |
+| 64  | 84.91%  | Blue |
+|  128 |  85.78% | Red |
+|  256 |  85.58% | Light blue |
+|  512 | **85.84%**  | Magenta |
+
+**Summary**: 
+
+### Third experiment (lr=0.0001)
+
+![Ex2 train accuracy](images/ex2_train_acc.png) ![Ex2 validation accuracy](images/ex2_val_acc.png)
+ 
+![Ex2 train loss](images/ex2_train_loss.png)  ![Ex2 validation loss](images/ex2_val_loss.png)
+
+**Test accuracy:**
+
+| Batch size | Accuracy | Color on the plot
+|---|---|---|
+| 32  | 83.82%  | Orange |
+| 64  | 84.91%  | Blue |
+|  128 |  85.78% | Red |
+|  256 |  85.58% | Light blue |
+|  512 | **85.84%**  | Magenta |
+
+**Summary**: 
 
 
 
