@@ -13,7 +13,7 @@ torch.cuda.manual_seed(13)  # Making sure that we have the same initial weights 
 num_epochs = 50
 num_classes = 10
 
-batch_size = sys.argv[1]
+batch_size = int(sys.argv[1])
 learning_rate = 0.001
 dropout = 0.5
 
