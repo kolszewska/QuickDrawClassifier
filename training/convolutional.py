@@ -6,16 +6,14 @@ from models.convolutional import Convolutional
 from training.data_helper import get_transforms_for_convolutional, load_data
 from training.training_helper import train, test
 
+torch.cuda.manual_seed(13)  # Making sure that we have the same initial weights in every experiment
+
 num_epochs = 50
 num_classes = 10
 
 batch_size = 32
 learning_rate = 0.001
-momentum = 0.9
 dropout = 0.5
-
-scheduler_step_size = 5
-scheduler_gamma = 0.1
 
 train_loader, validation_loader, test_loader, total_training_batches = load_data('out/train', 'out/validation',
                                                                                  'out/test', batch_size,
@@ -24,11 +22,11 @@ model = Convolutional(num_classes, dropout)
 model = model.cuda()  # Move model to CUDA
 criterion = loss.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=scheduler_step_size, gamma=scheduler_gamma)
 
-train(train_loader, validation_loader, num_epochs, total_training_batches, model, criterion, optimizer, scheduler)
+train(train_loader, validation_loader, num_epochs, total_training_batches, model, criterion, optimizer, batch_size,
+      learning_rate)
 
 loaded_model = Convolutional(num_classes, dropout)
-loaded_model.load_state_dict(torch.load('model.pt'))
+loaded_model.load_state_dict(torch.load('model_{}.pt'.format(batch_size)))
 
 test(test_loader, loaded_model)

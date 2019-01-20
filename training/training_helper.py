@@ -1,4 +1,5 @@
 import logging
+
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -15,8 +16,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 
 
 def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: int,
-          total_training_batches: int, model: Module, criterion: loss, optimizer: optim, scheduler: optim.lr_scheduler):
+          total_training_batches: int, model: Module, criterion: loss, optimizer: optim, batch_size: int,
+          learning_rate: float):
     """Train network."""
+
+    writer.add_text('Experiment summary', 'Batch size: {}, Learning rate {}'.format(batch_size, learning_rate))
+
     batch_number = 0
     step_number = 0
     previous_running_loss = 0
@@ -90,7 +95,7 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: i
                 logging.info(
                     'Validation loss decreased {:.5f} -> {:.5f}. Saving model.'.format(previous_running_loss,
                                                                                        validation_running_loss))
-                torch.save(model.state_dict(), 'model.pt')
+                torch.save(model.state_dict(), 'model_{}.pt'.format(batch_size))
 
             previous_running_loss = validation_running_loss
 
@@ -102,10 +107,10 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: i
             train_accuracy = (train_accuracy / train_loader.batch_sampler.sampler.num_samples * 100)
 
             # Saving losses and accuracy
-            writer.add_scalar('data/train_loss', train_running_loss, step_number)
-            writer.add_scalar('data/train_accuracy', train_accuracy, step_number)
-            writer.add_scalar('data/validation_loss', validation_running_loss, step_number)
-            writer.add_scalar('data/validation_accuracy', validation_accuracy, step_number)
+            writer.add_scalar('data/train_loss', train_running_loss, epoch)
+            writer.add_scalar('data/train_accuracy', train_accuracy, epoch)
+            writer.add_scalar('data/validation_loss', validation_running_loss, epoch)
+            writer.add_scalar('data/validation_accuracy', validation_accuracy, epoch)
 
             logging.info("Epoch: {}/{}.. ".format(epoch + 1, num_epochs))
             logging.info("Training Loss: {:.3f}.. ".format(train_running_loss))
