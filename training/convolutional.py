@@ -14,7 +14,7 @@ num_epochs = 50
 num_classes = 10
 
 batch_size = int(sys.argv[1])
-learning_rate = 0.001
+learning_rate = 0.0001
 dropout = 0.5
 
 train_loader, validation_loader, test_loader, total_training_batches = load_data('out/train', 'out/validation',
