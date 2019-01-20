@@ -15,9 +15,8 @@ writer = SummaryWriter()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
-def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: int,
-          total_training_batches: int, model: Module, criterion: loss, optimizer: optim, batch_size: int,
-          learning_rate: float):
+def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: int, total_training_batches: int,
+          model: Module, criterion: loss, optimizer: optim, batch_size: int, learning_rate: float):
     """Train network."""
 
     writer.add_text('Experiment summary', 'Batch size: {}, Learning rate {}'.format(batch_size, learning_rate))
@@ -29,7 +28,6 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: i
     for epoch in range(num_epochs):
         train_running_loss = 0
         train_accuracy = 0
-        # scheduler.step()  TODO
         for images, labels in train_loader:
             if batch_number % 10 == 0:
                 logging.info('Batch number {}/{}...'.format(batch_number, total_training_batches))
@@ -107,10 +105,10 @@ def train(train_loader: DataLoader, validation_loader: DataLoader, num_epochs: i
             train_accuracy = (train_accuracy / train_loader.batch_sampler.sampler.num_samples * 100)
 
             # Saving losses and accuracy
-            writer.add_scalar('data/train_loss', train_running_loss, epoch)
-            writer.add_scalar('data/train_accuracy', train_accuracy, epoch)
-            writer.add_scalar('data/validation_loss', validation_running_loss, epoch)
-            writer.add_scalar('data/validation_accuracy', validation_accuracy, epoch)
+            writer.add_scalar('loss/train_loss', train_running_loss, epoch)
+            writer.add_scalar('accuracy/train_accuracy', train_accuracy, epoch)
+            writer.add_scalar('loss/validation_loss', validation_running_loss, epoch)
+            writer.add_scalar('accuracy/validation_accuracy', validation_accuracy, epoch)
 
             logging.info("Epoch: {}/{}.. ".format(epoch + 1, num_epochs))
             logging.info("Training Loss: {:.3f}.. ".format(train_running_loss))
@@ -152,7 +150,7 @@ def test(test_loader: DataLoader, model: Convolutional):
         running_accuracy += torch.sum(equals.type(torch.FloatTensor)).item()
 
     test_accuracy = (running_accuracy / test_loader.sampler.num_samples * 100)
-    writer.add_scalar('data/test_accuracy', test_accuracy)
+    writer.add_text('Experiment summary', str(test_accuracy))
     logging.info("Test Accuracy: {:.3f}%".format(test_accuracy))
 
     writer.close()

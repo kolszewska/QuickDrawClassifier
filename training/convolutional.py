@@ -1,3 +1,5 @@
+import sys
+
 import torch
 from torch import optim
 from torch.nn.modules import loss
@@ -11,7 +13,7 @@ torch.cuda.manual_seed(13)  # Making sure that we have the same initial weights 
 num_epochs = 50
 num_classes = 10
 
-batch_size = 32
+batch_size = sys.argv[1]
 learning_rate = 0.001
 dropout = 0.5
 
@@ -28,5 +30,4 @@ train(train_loader, validation_loader, num_epochs, total_training_batches, model
 
 loaded_model = Convolutional(num_classes, dropout)
 loaded_model.load_state_dict(torch.load('model_{}.pt'.format(batch_size)))
-
 test(test_loader, loaded_model)

@@ -27,17 +27,17 @@ for file in npy_files:
 
 # Create directories
 for category in categories:
-    os.makedirs(os.path.join(out_dir, 'train', category))
-    os.makedirs(os.path.join(out_dir, 'validation', category))
-    os.makedirs(os.path.join(out_dir, 'test', category))
+    os.makedirs(os.path.join(out_dir, 'train', category), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, 'validation', category), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, 'test', category), exist_ok=True)
 
 # Split pictures to train, test and validation folders
 category_index = 0
 for file in npy_files:
     images_from_npy = np.load(os.path.join(npy_dir, file))
-    train_images = range(0, 800, 1)
-    validation_images = range(800, 1000, 1)
-    test_images = range(1000, 1150, 1)
+    train_images = range(0, 20000, 1)
+    validation_images = range(20000, 24000, 1)
+    test_images = range(24000, 25000, 1)
 
     convert_images(train_images, images_from_npy, 'train', category_index)
     convert_images(validation_images, images_from_npy, 'validation', category_index)
