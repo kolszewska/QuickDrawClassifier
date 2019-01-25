@@ -130,9 +130,9 @@ Shared parameters during the experiments:
 |  256 |  10% | Orange |
 |  **512** | **65.13%**| **Green** |
 
-**Summary**: The experiment result is actually what was expected. Large learning rate
-makes it unable to actually hit a global minima. So every model below the 512 batch size
-was returning the same class which (when we have 10 classes) results in exactly 10% accuracy.
+**Summary**: In this experiment we can see that choosing such large large learning rate makes it
+unable to actually hit a global minima. We can then observe the outcome of this: every model below the 512 
+batch size was returning the same class which (when we have 10 classes) results in exactly 10% accuracy.
 
 ### Second experiment (lr=0.001)
 
@@ -150,7 +150,8 @@ was returning the same class which (when we have 10 classes) results in exactly 
 |  256 |  85.58% | Light blue |
 |  **512** | **85.84%**  | **Magenta** |
 
-**Summary**: 
+**Summary**: In this experiment we can see that decreasing the learning rate 10x have a massive effect for the test
+accuracy.
 
 ### Third experiment (lr=0.0001)
 
@@ -168,12 +169,6 @@ was returning the same class which (when we have 10 classes) results in exactly 
 |  256 |  85.34% | Green |
 |  512 | 84.57%  | Light blue |
 
-**Summary**: 
-
-
-
-
-
-
-
-
+**Summary**: In this experiment we can observe that decreasing learning rate even more did not improved the test
+accuracy dramaticaly, but it did change the plots. They are much smoother due to fact that we are making much smaller
+steps than before when searching for a global minima.
